@@ -4,10 +4,11 @@ declare global {
       NODE_ENV: "development" | "production";
       NEXTAUTH_SECRET: string; //Session Secret
       APP_JWT_SECRET: string; //Authorization Token secret
+      NEXTAUTH_URL: string;
+      
       GOOGLE_CLIENT_ID: string;
       GOOGLE_CLIENT_SECRET: string;
-      GITLAB_CLIENT_ID: string;
-      GITLAB_CLIENT_SECRET: string;
+      
       NEXT_PUBLIC_SUPABASE_URL: string;
       SUPABASE_SERVICE_ROLE_KEY: string;
     }
