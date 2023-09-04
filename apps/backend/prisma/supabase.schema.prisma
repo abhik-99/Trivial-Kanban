@@ -1,11 +1,12 @@
 generator client {
   provider = "prisma-client-js"
+  output = "../../../node_modules/@prisma/supabase"
 }
 
 datasource db {
   provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+  url       = env("SUPABASE_DATABASE_URL")
+  directUrl = env("SUPABASE_DIRECT_URL")
 }
 
 model accounts {

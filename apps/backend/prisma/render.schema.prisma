@@ -1,0 +1,79 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../../../node_modules/@prisma/render"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("RENDER_DATABASE_URL")
+}
+
+model Board {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  boardName        String
+  boardDescription String
+
+  columns Column[]
+}
+
+model Column {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  columnName        String
+  columnDescription String
+
+  board   Board  @relation(fields: [boardId], references: [id])
+  boardId String
+
+  cards Card[]
+}
+
+model Card {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  cardNumber Int
+  cardName        String
+  cardDescription String
+  createdBy       String
+  assignedTo      String
+  storyPoints     Int
+  priority        Priority
+  status          Status
+  startDate       DateTime
+  endDate         DateTime
+
+  comments Comment[]
+  Column   Column   @relation(fields: [columnId], references: [id])
+  columnId String
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  createdBy String
+  body      String
+  Card      Card?   @relation(fields: [cardId], references: [id])
+  cardId    String?
+}
+
+enum Priority {
+  CRITICAL
+  HIGH
+  MEDIUM
+  LOW
+}
+
+enum Status {
+  TODO
+  IN_PROGRESS
+  DONE
+}

@@ -8,16 +8,18 @@ import { GoogleStrategy } from './strategies';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './strategies/jwt.strategy';
-import { PrismaModule } from './prisma/prisma.module';
 import { HealthModule } from './health/health.module';
+import { PrismaSupabaseModule } from './prisma-supabase/prisma-supabase.module';
+import { PrismaRenderModule } from './prisma-render/prisma-render.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
       validationSchema: Joi.object({
-        DATABASE_URL: Joi.string().required(),
-        DIRECT_URL: Joi.string().required(),
+        SUPABASE_DATABASE_URL: Joi.string().required(),
+        SUPABASE_DIRECT_URL: Joi.string().required(),
+        RENDER_DATABASE_URL: Joi.string().required(),
         GOOGLE_CLIENT_ID: Joi.string().required(),
         GOOGLE_CLIENT_SECRET: Joi.string().required(),
         GOOGLE_CALLBACK_URL: Joi.string().required(),
@@ -29,8 +31,9 @@ import { HealthModule } from './health/health.module';
     JwtModule.register({
       global: true,
     }),
-    PrismaModule,
     HealthModule,
+    PrismaSupabaseModule,
+    PrismaRenderModule,
   ],
   controllers: [AppController],
   providers: [AppService, GoogleStrategy, JwtStrategy],

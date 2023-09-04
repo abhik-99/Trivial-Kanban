@@ -1,15 +1,15 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import { PrismaService } from 'src/prisma/prisma.service';
 import { GoogleLoginUserDto } from './dto/google-login.dto';
+import { PrismaSupabaseService } from 'src/prisma-supabase/prisma-supabase.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private jwtService: JwtService,
     private configService: ConfigService,
-    private prisma: PrismaService,
+    private prisma: PrismaSupabaseService,
   ) {}
   async googleLogin(user: GoogleLoginUserDto) {
     if (!user) {
