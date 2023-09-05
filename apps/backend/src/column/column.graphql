@@ -1,0 +1,24 @@
+type Column {
+  # Example field (placeholder)
+  exampleField: Int
+}
+
+input CreateColumnInput {
+  # Example field (placeholder)
+  exampleField: Int
+}
+
+input UpdateColumnInput {
+  id: Int!
+}
+
+type Query {
+  column: [Column]!
+  column(id: Int!): Column
+}
+
+type Mutation {
+  createColumn(createColumnInput: CreateColumnInput!): Column!
+  updateColumn(updateColumnInput: UpdateColumnInput!): Column!
+  removeColumn(id: Int!): Column
+}

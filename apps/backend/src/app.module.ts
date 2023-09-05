@@ -11,6 +11,11 @@ import { JwtStrategy } from './strategies/jwt.strategy';
 import { HealthModule } from './health/health.module';
 import { PrismaSupabaseModule } from './prisma-supabase/prisma-supabase.module';
 import { PrismaRenderModule } from './prisma-render/prisma-render.module';
+import { CardModule } from './card/card.module';
+import { GraphQLModule } from '@nestjs/graphql';
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import { BoardModule } from './board/board.module';
+import { ColumnModule } from './column/column.module';
 
 @Module({
   imports: [
@@ -34,6 +39,14 @@ import { PrismaRenderModule } from './prisma-render/prisma-render.module';
     HealthModule,
     PrismaSupabaseModule,
     PrismaRenderModule,
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+      driver: ApolloDriver,
+      include: [CardModule],
+      autoSchemaFile: true
+    }),
+    CardModule,
+    BoardModule,
+    ColumnModule
   ],
   controllers: [AppController],
   providers: [AppService, GoogleStrategy, JwtStrategy],

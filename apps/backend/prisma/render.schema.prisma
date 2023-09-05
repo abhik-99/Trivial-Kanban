@@ -15,8 +15,19 @@ model Board {
 
   boardName        String
   boardDescription String
+  createdBy        String
 
-  columns Column[]
+  columns   Column[]
+  boardUsers BoardUser[]
+}
+
+model BoardUser {
+  userId String
+  board  Board  @relation(fields: [boardId], references: [id])
+
+  boardId String
+
+  @@unique([userId, boardId])
 }
 
 model Column {
@@ -38,7 +49,7 @@ model Card {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  cardNumber Int
+  cardNumber      Int
   cardName        String
   cardDescription String
   createdBy       String
@@ -50,7 +61,7 @@ model Card {
   endDate         DateTime
 
   comments Comment[]
-  Column   Column   @relation(fields: [columnId], references: [id])
+  Column   Column    @relation(fields: [columnId], references: [id])
   columnId String
 }
 
