@@ -5,7 +5,6 @@ import { HttpUser } from 'src/decorators';
 import { HttpGoogleOAuthGuard } from 'src/guards';
 import { GoogleLoginUserDto } from './dto/google-login.dto';
 
-
 @SetMetadata('google-login', true)
 @UseGuards(HttpGoogleOAuthGuard)
 @Controller('auth')

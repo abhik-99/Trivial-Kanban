@@ -1,26 +1,63 @@
 import { Injectable } from '@nestjs/common';
 import { CreateBoardInput } from './dto/create-board.input';
 import { UpdateBoardInput } from './dto/update-board.input';
+import { PrismaRenderService } from 'src/prisma-render/prisma-render.service';
 
 @Injectable()
 export class BoardService {
-  create(createBoardInput: CreateBoardInput) {
-    return 'This action adds a new board';
+  constructor(private prisma: PrismaRenderService) {}
+  create(createBoardInput: CreateBoardInput, userId: string) {
+    return this.prisma.board.create({
+      data: {
+        ...createBoardInput,
+        createdBy: userId,
+        boardUsers: {
+          create: {
+            userId,
+          },
+        },
+      },
+    });
   }
 
-  findAll() {
-    return `This action returns all board`;
+  findAll(userId: string) {
+    return this.prisma.board.findMany({
+      where: {
+        boardUsers: {
+          every: {
+            userId,
+          },
+        },
+      },
+    });
   }
 
-  findOne(id: string) {
-    return `This action returns a #${id} board`;
+  findOne(id: string, userId: string) {
+    return this.prisma.board.findUniqueOrThrow({
+      where: { id, boardUsers: { some: { userId } } },
+    });
   }
 
-  update(id: string, updateBoardInput: UpdateBoardInput) {
-    return `This action updates a #${id} board`;
+  update(
+    id: string,
+    { id: _id, ...updateBoardInput }: UpdateBoardInput,
+    createdBy: string,
+  ) {
+    return this.prisma.board.update({
+      where: {
+        id,
+        createdBy,
+      },
+      data: updateBoardInput,
+    });
   }
 
-  remove(id: string) {
-    return `This action removes a #${id} board`;
+  remove(id: string, createdBy: string) {
+    return this.prisma.board.delete({
+      where: {
+        id,
+        createdBy,
+      },
+    });
   }
 }

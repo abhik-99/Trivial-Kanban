@@ -17,6 +17,6 @@ export class Board {
   @Field(() => String)
   boardDescription:string
 
-  @Field(() => String)
+  @Field(() => ID)
   createdBy:string
 }

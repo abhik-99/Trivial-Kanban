@@ -41,7 +41,7 @@ import { ColumnModule } from './column/column.module';
     PrismaRenderModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
-      include: [CardModule],
+      include: [CardModule, BoardModule],
       autoSchemaFile: true
     }),
     CardModule,

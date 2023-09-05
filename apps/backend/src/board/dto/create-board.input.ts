@@ -1,13 +1,11 @@
-import { InputType, Int, Field, OmitType } from '@nestjs/graphql';
-import { Board } from '../entities/board.entity';
+import { InputType, Field } from '@nestjs/graphql';
 
 @InputType()
-export class CreateBoardInput extends OmitType(Board, [
-  'id',
-  'createdAt',
-  'createdBy',
-  'updatedAt',
-]) {
-  @Field(() => Int, { description: 'Example field (placeholder)' })
-  exampleField: number;
+export class CreateBoardInput {
+  
+  @Field(() => String)
+  boardName:string
+
+  @Field(() => String)
+  boardDescription:string
 }
