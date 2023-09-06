@@ -1,0 +1,63 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Card {
+  """Example field (placeholder)"""
+  exampleField: Int!
+
+  """Example field (placeholder)"""
+  exampleField2: String!
+}
+
+type Board {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  boardName: String!
+  boardDescription: String!
+  createdBy: ID!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Query {
+  boards: [Board!]!
+  board(id: String!): Board!
+  cards: [Card!]!
+  card(id: Int!): Card!
+}
+
+type Mutation {
+  createBoard(createBoardInput: CreateBoardInput!): Board!
+  updateBoard(updateBoardInput: UpdateBoardInput!): Board!
+  removeBoard(id: String!): Board!
+  createCard(createCardInput: CreateCardInput!): Card!
+  updateCard(updateCardInput: UpdateCardInput!): Card!
+  removeCard(id: Int!): Card!
+}
+
+input CreateBoardInput {
+  boardName: String!
+  boardDescription: String!
+}
+
+input UpdateBoardInput {
+  boardName: String
+  boardDescription: String
+  id: String!
+}
+
+input CreateCardInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateCardInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}

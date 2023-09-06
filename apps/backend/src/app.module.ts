@@ -16,6 +16,8 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { BoardModule } from './board/board.module';
 import { ColumnModule } from './column/column.module';
+import { join } from 'path';
+import { BoardUserModule } from './board-user/board-user.module';
 
 @Module({
   imports: [
@@ -41,12 +43,25 @@ import { ColumnModule } from './column/column.module';
     PrismaRenderModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
+      // path: "graphql-code",
       include: [CardModule, BoardModule],
-      autoSchemaFile: true
+      autoSchemaFile: join(process.cwd(), 'src/graphql-schema/schema.gql')
     }),
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+      driver: ApolloDriver,
+      path: "graphql-schema",
+      include: [BoardUserModule, ColumnModule],
+      typePaths: ['./**/*.graphql', './**/*.gql'],
+      definitions: {
+        path: join(process.cwd(), 'src/graphql-ts/graphql.ts'),
+        outputAs: 'class',
+      }
+    }),
+
     CardModule,
     BoardModule,
-    ColumnModule
+    ColumnModule,
+    BoardUserModule
   ],
   controllers: [AppController],
   providers: [AppService, GoogleStrategy, JwtStrategy],

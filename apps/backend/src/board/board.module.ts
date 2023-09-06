@@ -4,5 +4,6 @@ import { BoardResolver } from './board.resolver';
 
 @Module({
   providers: [BoardResolver, BoardService],
+  exports: [BoardService]
 })
 export class BoardModule {}

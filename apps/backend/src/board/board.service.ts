@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateBoardInput } from './dto/create-board.input';
 import { UpdateBoardInput } from './dto/update-board.input';
 import { PrismaRenderService } from 'src/prisma-render/prisma-render.service';
+import { Prisma } from '@prisma/render';
 
 @Injectable()
 export class BoardService {
@@ -32,9 +33,11 @@ export class BoardService {
     });
   }
 
-  findOne(id: string, userId: string) {
+  findOne(id: string, userId?: string) {
+    const filter: Prisma.BoardWhereUniqueInput = {id}
+    if(userId) filter.boardUsers = { some: { userId } }
     return this.prisma.board.findUniqueOrThrow({
-      where: { id, boardUsers: { some: { userId } } },
+      where: filter,
     });
   }
 

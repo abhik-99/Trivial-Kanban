@@ -23,7 +23,7 @@ model Board {
 
 model BoardUser {
   userId String
-  board  Board  @relation(fields: [boardId], references: [id])
+  board  Board  @relation(fields: [boardId], references: [id], onDelete: Cascade)
 
   boardId String
 

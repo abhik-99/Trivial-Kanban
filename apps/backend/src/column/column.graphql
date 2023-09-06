@@ -13,7 +13,7 @@ input UpdateColumnInput {
 }
 
 type Query {
-  column: [Column]!
+  columns: [Column]!
   column(id: Int!): Column
 }
 
