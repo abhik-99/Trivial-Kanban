@@ -22,25 +22,32 @@ export class CardService {
         createdBy,
       },
     });
-    console.log("CARD CREATED =====", card)
-    return card
+    console.log('CARD CREATED =====', card);
+    return card;
   }
 
-  findAll(where: Prisma.CardWhereInput) {
-    return this.prisma.card.findMany({where});
+  findAll(where: Prisma.CardWhereInput, userId?: string) {
+    if (userId)
+      where = {
+        ...where,
+        column: { board: { boardUsers: { some: { userId } } } },
+      };
+    return this.prisma.card.findMany({
+      where,
+    });
   }
 
   findOne(id: string) {
-    return this.prisma.card.findUniqueOrThrow({where: {id}});
+    return this.prisma.card.findUniqueOrThrow({ where: { id } });
   }
 
-  update(id: string, {columnId, ...updateCardInput}: UpdateCardInput) {
-    var data: Prisma.CardUpdateInput = {...updateCardInput}
-    if(columnId) data.column = {connect: {id: columnId}}
-    return this.prisma.card.update({where: {id}, data});
+  update(id: string, { columnId, ...updateCardInput }: UpdateCardInput) {
+    var data: Prisma.CardUpdateInput = { ...updateCardInput };
+    if (columnId) data.column = { connect: { id: columnId } };
+    return this.prisma.card.update({ where: { id }, data });
   }
 
   remove(id: string) {
-    return this.prisma.card.delete({where: {id}});
+    return this.prisma.card.delete({ where: { id } });
   }
 }

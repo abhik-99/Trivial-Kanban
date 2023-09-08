@@ -29,8 +29,8 @@ type Column {
   updatedAt: DateTime!
   columnName: String!
   columnDescription: String!
-  board: Board!
   boardId: String!
+  board: Board!
   cards: [Card]
 }
 
@@ -76,7 +76,7 @@ type Query {
   board(id: String!): Board!
   columns: [Column!]!
   column(id: String!): Column!
-  cards(columnId: String!): [Card!]!
+  cards(columnId: String): [Card!]!
   card(id: String!): Card!
   boardUsers: [BoardUser!]!
 }

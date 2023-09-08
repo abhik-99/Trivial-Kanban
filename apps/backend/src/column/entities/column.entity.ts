@@ -16,12 +16,12 @@ export class Column {
   columnName: string;
   @Field(() => String)
   columnDescription: string;
+  
+  @Field(() => String)
+  boardId: string;
 
   @Field(() => Board)
   board: Board;
-
-  @Field(() => String)
-  boardId: string;
 
   @Field(() => [Card], {nullable: 'itemsAndList'})
   cards: Card[];

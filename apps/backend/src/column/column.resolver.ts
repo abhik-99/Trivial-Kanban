@@ -13,6 +13,8 @@ import { Column } from './entities/column.entity';
 import { GraphQLUser } from 'src/decorators';
 import { BoardService } from 'src/board/board.service';
 import { CardService } from 'src/card/card.service';
+import { Card } from 'src/card/entities/card.entity';
+import { Board } from 'src/board/entities/board.entity';
 
 @Resolver(() => Column)
 export class ColumnResolver {
@@ -53,13 +55,12 @@ export class ColumnResolver {
     return this.columnService.remove(id, userId);
   }
 
-  @ResolveField()
+  @ResolveField(undefined, returns => Board)
   async board(@Parent() column: Column) {
-    const { boardId } = column;
-    return this.boardService.findOne(boardId);
+    return this.boardService.findOne(column.boardId);
   }
 
-  @ResolveField()
+  @ResolveField(undefined, returns => [Card])
   async cards(@Parent() column: Column) {
     const { id } = column;
     return this.cardService.findAll({columnId: id});
