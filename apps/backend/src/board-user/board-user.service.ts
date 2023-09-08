@@ -39,7 +39,7 @@ export class BoardUserService {
     if(boardId) filter = {...filter, boardId}
     return this.prisma.boardUser.findMany({
         where: filter
-      });
+    });
   }
 
   async remove(

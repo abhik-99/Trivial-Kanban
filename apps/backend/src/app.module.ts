@@ -18,6 +18,7 @@ import { BoardModule } from './board/board.module';
 import { ColumnModule } from './column/column.module';
 import { join } from 'path';
 import { BoardUserModule } from './board-user/board-user.module';
+import { CommentModule } from './comment/comment.module';
 
 @Module({
   imports: [
@@ -43,7 +44,7 @@ import { BoardUserModule } from './board-user/board-user.module';
     PrismaRenderModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
-      include: [CardModule, BoardModule, BoardUserModule],
+      include: [CardModule, BoardModule, BoardUserModule, ColumnModule],
       autoSchemaFile: join(process.cwd(), 'src/graphql-schema/schema.gql'),
     }),
 
@@ -51,6 +52,7 @@ import { BoardUserModule } from './board-user/board-user.module';
     BoardModule,
     ColumnModule,
     BoardUserModule,
+    CommentModule,
   ],
   controllers: [AppController],
   providers: [AppService, GoogleStrategy, JwtStrategy],

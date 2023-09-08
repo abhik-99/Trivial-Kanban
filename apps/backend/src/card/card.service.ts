@@ -12,15 +12,15 @@ export class CardService {
     return [{exampleField2:`This action returns all card`}];
   }
 
-  findOne(id: number) {
+  findOne(id: string) {
     return `This action returns a #${id} card`;
   }
 
-  update(id: number, updateCardInput: UpdateCardInput) {
+  update(id: string, updateCardInput: UpdateCardInput) {
     return `This action updates a #${id} card`;
   }
 
-  remove(id: number) {
+  remove(id: string) {
     return `This action removes a #${id} card`;
   }
 }

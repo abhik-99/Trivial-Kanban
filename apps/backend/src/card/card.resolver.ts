@@ -21,7 +21,7 @@ export class CardResolver {
   }
 
   @Query(() => Card, { name: 'card' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
+  findOne(@Args('id', { type: () => Int }) id: string) {
     return this.cardService.findOne(id);
   }
 
@@ -31,7 +31,7 @@ export class CardResolver {
   }
 
   @Mutation(() => Card)
-  removeCard(@Args('id', { type: () => Int }) id: number) {
+  removeCard(@Args('id', { type: () => Int }) id: string) {
     return this.cardService.remove(id);
   }
 }

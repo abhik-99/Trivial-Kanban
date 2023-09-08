@@ -1,26 +1,51 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { CreateColumnInput } from './dto/create-column.input';
 import { UpdateColumnInput } from './dto/update-column.input';
+import { PrismaRenderService } from 'src/prisma-render/prisma-render.service';
+import { BoardUserService } from 'src/board-user/board-user.service';
+import { Prisma } from '@prisma/render';
 
 @Injectable()
 export class ColumnService {
-  create(createColumnInput: CreateColumnInput) {
-    return 'This action adds a new column';
+  constructor(
+    private prisma: PrismaRenderService,
+    private readonly boardUserService: BoardUserService,
+  ) {}
+
+  async create(
+    { boardId, ...createColumnInput }: CreateColumnInput,
+    userId: string,
+  ) {
+    const boardUser = await this.boardUserService.findAll(userId, boardId);
+    if (boardUser.length === 0)
+      throw new ForbiddenException('User not authorized');
+
+    return this.prisma.column.create({
+      data: { ...createColumnInput, board: { connect: { id: boardId } } },
+    });
   }
 
-  findAll() {
-    return `This action returns all column`;
+  async findAll(where: Prisma.ColumnWhereInput) {
+    return this.prisma.column.findMany({ where });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} column`;
+  findOne(id: string) {
+    return this.prisma.column.findUniqueOrThrow({ where: { id } });
   }
 
-  update(id: number, updateColumnInput: UpdateColumnInput) {
-    return `This action updates a #${id} column`;
+  update({ id, ...updateColumnInput }: UpdateColumnInput, userId: string) {
+    return this.prisma.column.update({
+      where: { id, board: { boardUsers: { some: { userId } } } },
+      data: updateColumnInput,
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} column`;
+  remove(id: string, createdBy: string) {
+    return this.prisma.column.delete({where: {
+      id,
+      board: {
+        createdBy
+      }
+    }});
   }
 }

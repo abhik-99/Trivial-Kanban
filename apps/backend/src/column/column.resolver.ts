@@ -1,34 +1,59 @@
-import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
+import {
+  Resolver,
+  Query,
+  Mutation,
+  Args,
+  ResolveField,
+  Parent,
+} from '@nestjs/graphql';
 import { ColumnService } from './column.service';
 import { CreateColumnInput } from './dto/create-column.input';
 import { UpdateColumnInput } from './dto/update-column.input';
+import { Column } from './entities/column.entity';
+import { GraphQLUser } from 'src/decorators';
+import { BoardService } from 'src/board/board.service';
 
-@Resolver('Column')
+@Resolver(() => Column)
 export class ColumnResolver {
-  constructor(private readonly columnService: ColumnService) {}
+  constructor(
+    private readonly columnService: ColumnService,
+    private readonly boardService: BoardService,
+  ) {}
 
-  @Mutation('createColumn')
-  create(@Args('createColumnInput') createColumnInput: CreateColumnInput) {
-    return this.columnService.create(createColumnInput);
+  @Mutation(() => Column, { name: 'createColumn' })
+  create(
+    @Args('createColumnInput') createColumnInput: CreateColumnInput,
+    @GraphQLUser('sub') userId: string,
+  ) {
+    return this.columnService.create(createColumnInput, userId);
   }
 
-  @Query('column')
+  @Query(() => [Column], { name: 'columns' })
   findAll() {
-    return this.columnService.findAll();
+    return this.columnService.findAll({});
   }
 
-  @Query('column')
-  findOne(@Args('id') id: number) {
+  @Query(() => Column, { name: 'column' })
+  findOne(@Args('id') id: string) {
     return this.columnService.findOne(id);
   }
 
-  @Mutation('updateColumn')
-  update(@Args('updateColumnInput') updateColumnInput: UpdateColumnInput) {
-    return this.columnService.update(updateColumnInput.id, updateColumnInput);
+  @Mutation(() => Column, { name: 'updateColumn' })
+  update(
+    @Args('updateColumnInput') updateColumnInput: UpdateColumnInput,
+    @GraphQLUser('sub') userId: string,
+  ) {
+    return this.columnService.update(updateColumnInput, userId);
   }
 
-  @Mutation('removeColumn')
-  remove(@Args('id') id: number) {
-    return this.columnService.remove(id);
+  @Mutation(() => Column, { name: 'removeColumn' })
+  remove(@Args('id') id: string, @GraphQLUser('sub') userId: string) {
+    return this.columnService.remove(id, userId);
+  }
+
+  @ResolveField()
+  async board(@Parent() column) {
+    const { boardId } = column;
+    return this.boardService.findOne(boardId);
   }
 }

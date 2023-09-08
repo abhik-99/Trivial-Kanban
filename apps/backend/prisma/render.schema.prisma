@@ -61,7 +61,7 @@ model Card {
   endDate         DateTime
 
   comments Comment[]
-  Column   Column    @relation(fields: [columnId], references: [id])
+  column   Column    @relation(fields: [columnId], references: [id])
   columnId String
 }
 
