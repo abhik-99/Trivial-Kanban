@@ -10,6 +10,11 @@ type Card {
   exampleField2: String!
 }
 
+type BoardUser {
+  userId: ID!
+  board: Board!
+}
+
 type Board {
   id: ID!
   createdAt: DateTime!
@@ -17,6 +22,7 @@ type Board {
   boardName: String!
   boardDescription: String!
   createdBy: ID!
+  boardUsers: [BoardUser!]!
 }
 
 """
@@ -25,6 +31,7 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 scalar DateTime
 
 type Query {
+  boardUsers: [BoardUser!]!
   boards: [Board!]!
   board(id: String!): Board!
   cards: [Card!]!
@@ -32,12 +39,24 @@ type Query {
 }
 
 type Mutation {
+  addBoardUser(addBoardUserInput: AddBoardUserInput!): BoardUser!
+  removeBoardUser(removeBoardUser: RemoveBoardUserInput!): BoardUser!
   createBoard(createBoardInput: CreateBoardInput!): Board!
   updateBoard(updateBoardInput: UpdateBoardInput!): Board!
   removeBoard(id: String!): Board!
   createCard(createCardInput: CreateCardInput!): Card!
   updateCard(updateCardInput: UpdateCardInput!): Card!
   removeCard(id: Int!): Card!
+}
+
+input AddBoardUserInput {
+  userId: String!
+  boardId: String!
+}
+
+input RemoveBoardUserInput {
+  userId: String!
+  boardId: String!
 }
 
 input CreateBoardInput {

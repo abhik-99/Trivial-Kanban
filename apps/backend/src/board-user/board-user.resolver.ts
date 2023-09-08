@@ -3,29 +3,32 @@ import { BoardUserService } from './board-user.service';
 import { AddBoardUserInput } from './dto/add-board-user.input';
 import { RemoveBoardUserInput } from './dto/remove-board-user.input';
 import { BoardService } from 'src/board/board.service';
+import { BoardUser } from './entities/board-user.entity';
+import { GraphQLUser } from 'src/decorators';
+import { UserJwt } from 'src/auth/dto/user-jwt.dto';
 
-@Resolver('BoardUser')
+@Resolver(() => BoardUser)
 export class BoardUserResolver {
   constructor(private readonly boardUserService: BoardUserService, private readonly boardService: BoardService) {}
 
-  @Mutation('addBoardUser')
-  create(@Args('addBoardUserInput') addBoardUserInput: AddBoardUserInput) {
-    return this.boardUserService.create(addBoardUserInput);
+  @Mutation(() => BoardUser, {name: 'addBoardUser'})
+  create(@Args('addBoardUserInput') addBoardUserInput: AddBoardUserInput, @GraphQLUser() user: UserJwt) {
+    return this.boardUserService.create(addBoardUserInput, user.sub);
   }
 
-  @Query('boardUsers')
+  @Query(() => [BoardUser], {name: 'boardUsers'})
   findAll() {
     return this.boardUserService.findAll();
   }
 
-  @Mutation('removeBoardUser')
-  remove(@Args('removeBoardUser') removeBoardUserInput: RemoveBoardUserInput) {
-    return this.boardUserService.remove(removeBoardUserInput);
+  @Mutation(() => BoardUser, {name: 'removeBoardUser'})
+  remove(@Args('removeBoardUser') removeBoardUserInput: RemoveBoardUserInput, @GraphQLUser() user: UserJwt) {
+    return this.boardUserService.remove(removeBoardUserInput, user.sub);
   }
 
   @ResolveField()
-  async board(@Parent() board) {
-    const { boardId } = board;
+  async board(@Parent() boardUser) {
+    const { boardId } = boardUser;
     return this.boardService.findOne(boardId);
   }
 }

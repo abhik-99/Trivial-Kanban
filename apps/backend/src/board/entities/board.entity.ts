@@ -1,4 +1,5 @@
 import { ObjectType, Field, ID, GraphQLISODateTime } from '@nestjs/graphql';
+import { BoardUser } from 'src/board-user/entities/board-user.entity';
 
 @ObjectType()
 export class Board {
@@ -19,4 +20,7 @@ export class Board {
 
   @Field(() => ID)
   createdBy:string
+
+  @Field(() => [BoardUser], {nullable: 'itemsAndList'})
+  boardUsers: BoardUser[]
 }

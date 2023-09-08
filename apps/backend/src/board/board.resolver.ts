@@ -1,14 +1,16 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Int, ResolveField, Parent } from '@nestjs/graphql';
 import { BoardService } from './board.service';
 import { Board } from './entities/board.entity';
 import { CreateBoardInput } from './dto/create-board.input';
 import { UpdateBoardInput } from './dto/update-board.input';
 import { GraphQLUser } from 'src/decorators';
 import { UserJwt } from 'src/auth/dto/user-jwt.dto';
+import { BoardUserService } from 'src/board-user/board-user.service';
+import { BoardUser } from 'src/board-user/entities/board-user.entity';
 
 @Resolver(() => Board)
 export class BoardResolver {
-  constructor(private readonly boardService: BoardService) {}
+  constructor(private readonly boardService: BoardService, private readonly boardUserService: BoardUserService) {}
 
   @Mutation(() => Board)
   createBoard(
@@ -36,5 +38,11 @@ export class BoardResolver {
   @Mutation(() => Board)
   removeBoard(@Args('id', { type: () => String }) id: string, @GraphQLUser() user: UserJwt) {
     return this.boardService.remove(id, user.sub);
+  }
+
+  @ResolveField('boardUsers', returns => [BoardUser])
+  async boardUsersResolver(@Parent() board) {
+    const { id } = board;
+    return this.boardUserService.findAll(undefined,id);
   }
 }

@@ -30,7 +30,7 @@ import { BoardUserModule } from './board-user/board-user.module';
         GOOGLE_CLIENT_ID: Joi.string().required(),
         GOOGLE_CLIENT_SECRET: Joi.string().required(),
         GOOGLE_CALLBACK_URL: Joi.string().required(),
-        APP_JWT_SECRET: Joi.string().required()
+        APP_JWT_SECRET: Joi.string().required(),
       }),
     }),
     AuthModule,
@@ -43,25 +43,14 @@ import { BoardUserModule } from './board-user/board-user.module';
     PrismaRenderModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
-      // path: "graphql-code",
-      include: [CardModule, BoardModule],
-      autoSchemaFile: join(process.cwd(), 'src/graphql-schema/schema.gql')
-    }),
-    GraphQLModule.forRoot<ApolloDriverConfig>({
-      driver: ApolloDriver,
-      path: "graphql-schema",
-      include: [BoardUserModule, ColumnModule],
-      typePaths: ['./**/*.graphql', './**/*.gql'],
-      definitions: {
-        path: join(process.cwd(), 'src/graphql-ts/graphql.ts'),
-        outputAs: 'class',
-      }
+      include: [CardModule, BoardModule, BoardUserModule],
+      autoSchemaFile: join(process.cwd(), 'src/graphql-schema/schema.gql'),
     }),
 
     CardModule,
     BoardModule,
     ColumnModule,
-    BoardUserModule
+    BoardUserModule,
   ],
   controllers: [AppController],
   providers: [AppService, GoogleStrategy, JwtStrategy],
