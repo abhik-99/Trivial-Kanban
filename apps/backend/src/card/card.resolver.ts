@@ -3,25 +3,27 @@ import { CardService } from './card.service';
 import { Card } from './entities/card.entity';
 import { CreateCardInput } from './dto/create-card.input';
 import { UpdateCardInput } from './dto/update-card.input';
-import { Public } from 'src/decorators';
+import { UseInterceptors } from '@nestjs/common';
+import { CardInterceptor } from 'src/interceptors/card.interceptor';
+import { GraphQLUser } from 'src/decorators';
 
-@Public()
+@UseInterceptors(new CardInterceptor())
 @Resolver(() => Card)
 export class CardResolver {
   constructor(private readonly cardService: CardService) {}
 
   @Mutation(() => Card)
-  createCard(@Args('createCardInput') createCardInput: CreateCardInput) {
-    return this.cardService.create(createCardInput);
+  createCard(@Args('createCardInput') createCardInput: CreateCardInput, @GraphQLUser('sub') userId: string) {
+    return this.cardService.create(createCardInput, userId);
   }
 
   @Query(() => [Card], { name: 'cards' })
-  findAll() {
-    return this.cardService.findAll();
+  findAll(@Args('columnId', { type: () => String }) columnId: string) {
+    return this.cardService.findAll({columnId});
   }
 
   @Query(() => Card, { name: 'card' })
-  findOne(@Args('id', { type: () => Int }) id: string) {
+  findOne(@Args('id', { type: () => String }) id: string) {
     return this.cardService.findOne(id);
   }
 
@@ -31,7 +33,7 @@ export class CardResolver {
   }
 
   @Mutation(() => Card)
-  removeCard(@Args('id', { type: () => Int }) id: string) {
+  removeCard(@Args('id', { type: () => String }) id: string) {
     return this.cardService.remove(id);
   }
 }

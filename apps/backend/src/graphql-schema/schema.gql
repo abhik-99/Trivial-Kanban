@@ -2,14 +2,6 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Card {
-  """Example field (placeholder)"""
-  exampleField: Int!
-
-  """Example field (placeholder)"""
-  exampleField2: String!
-}
-
 type BoardUser {
   userId: ID!
   board: Board!
@@ -23,6 +15,7 @@ type Board {
   boardDescription: String!
   createdBy: ID!
   boardUsers: [BoardUser!]!
+  columns: [Column!]!
 }
 
 """
@@ -30,33 +23,84 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type Column {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  columnName: String!
+  columnDescription: String!
+  board: Board!
+  cards: [Card!]!
+}
+
+type Comment {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+type Card {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  cardNumber: Int!
+  cardName: String!
+  cardDescription: String!
+  createdBy: String!
+  assignedTo: String!
+  storyPoints: Int!
+  priority: Priority!
+  status: Status!
+  startDate: DateTime!
+  endDate: DateTime!
+  comments: [Comment!]!
+  column: Column!
+}
+
+enum Priority {
+  CRITICAL
+  HIGH
+  MEDIUM
+  LOW
+}
+
+enum Status {
+  TODO
+  IN_PROGRESS
+  DONE
+}
+
 type Query {
-  boardUsers: [BoardUser!]!
+  columns: [Column!]!
+  column(id: String!): Column!
   boards: [Board!]!
   board(id: String!): Board!
-  cards: [Card!]!
-  card(id: Int!): Card!
+  boardUsers: [BoardUser!]!
+  cards(columnId: String!): [Card!]!
+  card(id: String!): Card!
 }
 
 type Mutation {
-  addBoardUser(addBoardUserInput: AddBoardUserInput!): BoardUser!
-  removeBoardUser(removeBoardUser: RemoveBoardUserInput!): BoardUser!
+  createColumn(createColumnInput: CreateColumnInput!): Column!
+  updateColumn(updateColumnInput: UpdateColumnInput!): Column!
+  removeColumn(id: String!): Column!
   createBoard(createBoardInput: CreateBoardInput!): Board!
   updateBoard(updateBoardInput: UpdateBoardInput!): Board!
   removeBoard(id: String!): Board!
+  addBoardUser(addBoardUserInput: AddBoardUserInput!): BoardUser!
+  removeBoardUser(removeBoardUser: RemoveBoardUserInput!): BoardUser!
   createCard(createCardInput: CreateCardInput!): Card!
   updateCard(updateCardInput: UpdateCardInput!): Card!
-  removeCard(id: Int!): Card!
+  removeCard(id: String!): Card!
 }
 
-input AddBoardUserInput {
-  userId: String!
+input CreateColumnInput {
   boardId: String!
+  columnName: String!
+  columnDescription: String!
 }
 
-input RemoveBoardUserInput {
-  userId: String!
-  boardId: String!
+input UpdateColumnInput {
+  id: String!
 }
 
 input CreateBoardInput {
@@ -70,13 +114,37 @@ input UpdateBoardInput {
   id: String!
 }
 
+input AddBoardUserInput {
+  userId: String!
+  boardId: String!
+}
+
+input RemoveBoardUserInput {
+  userId: String!
+  boardId: String!
+}
+
 input CreateCardInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  cardName: String!
+  cardDescription: String!
+  assignedTo: String!
+  storyPoints: Int!
+  priority: Priority!
+  status: Status!
+  startDate: DateTime!
+  endDate: DateTime!
+  columnId: String!
 }
 
 input UpdateCardInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
+  cardName: String
+  cardDescription: String
+  assignedTo: String
+  storyPoints: Int
+  priority: Priority
+  status: Status
+  startDate: DateTime
+  endDate: DateTime
+  columnId: String
+  id: String!
 }
