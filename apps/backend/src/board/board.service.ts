@@ -25,7 +25,7 @@ export class BoardService {
     return this.prisma.board.findMany({
       where: {
         boardUsers: {
-          every: {
+          some: {
             userId,
           },
         },

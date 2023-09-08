@@ -55,6 +55,9 @@ export class Card {
 
   @Field(() => Column)
   column: Column;
+
+  @Field(() => String)
+  columnId: string;
 }
 
 registerEnumType(Priority, { name: 'Priority' });

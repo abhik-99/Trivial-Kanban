@@ -2,7 +2,13 @@ import { InputType, Int, Field, GraphQLISODateTime } from '@nestjs/graphql';
 
 import { Priority, Status } from '@prisma/render';
 
-import { IsNotEmpty, IsUUID, IsNumber, IsEnum, IsDateString } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsUUID,
+  IsNumber,
+  IsEnum,
+  IsDate,
+} from 'class-validator';
 
 @InputType()
 export class CreateCardInput {
@@ -32,11 +38,11 @@ export class CreateCardInput {
   status: Status;
 
   @IsNotEmpty()
-  @IsDateString()
+  @IsDate()
   @Field(() => GraphQLISODateTime)
   startDate: Date;
 
-  @IsDateString()
+  @IsDate()
   @IsNotEmpty()
   @Field(() => GraphQLISODateTime)
   endDate: Date;

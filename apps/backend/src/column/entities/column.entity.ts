@@ -20,6 +20,9 @@ export class Column {
   @Field(() => Board)
   board: Board;
 
-  @Field(() => [Card!]!)
+  @Field(() => String)
+  boardId: string;
+
+  @Field(() => [Card], {nullable: 'itemsAndList'})
   cards: Card[];
 }

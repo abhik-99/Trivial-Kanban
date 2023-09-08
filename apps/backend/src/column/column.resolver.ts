@@ -12,12 +12,14 @@ import { UpdateColumnInput } from './dto/update-column.input';
 import { Column } from './entities/column.entity';
 import { GraphQLUser } from 'src/decorators';
 import { BoardService } from 'src/board/board.service';
+import { CardService } from 'src/card/card.service';
 
 @Resolver(() => Column)
 export class ColumnResolver {
   constructor(
     private readonly columnService: ColumnService,
     private readonly boardService: BoardService,
+    private readonly cardService: CardService
   ) {}
 
   @Mutation(() => Column, { name: 'createColumn' })
@@ -52,8 +54,14 @@ export class ColumnResolver {
   }
 
   @ResolveField()
-  async board(@Parent() column) {
+  async board(@Parent() column: Column) {
     const { boardId } = column;
     return this.boardService.findOne(boardId);
+  }
+
+  @ResolveField()
+  async cards(@Parent() column: Column) {
+    const { id } = column;
+    return this.cardService.findAll({columnId: id});
   }
 }

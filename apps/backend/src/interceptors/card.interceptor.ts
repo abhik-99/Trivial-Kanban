@@ -16,8 +16,8 @@ export class CardInterceptor implements NestInterceptor {
     const ctx = GqlExecutionContext.create(context).getContext();
     const user = ctx.user;
     const req = ctx.req;
-    console.log('User', user);
-    console.log('Request', req);
+    // console.log('User', user);
+    // console.log('Request', req);
 
     return next.handle();
   }

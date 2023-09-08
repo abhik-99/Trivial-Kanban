@@ -14,8 +14,8 @@ type Board {
   boardName: String!
   boardDescription: String!
   createdBy: ID!
-  boardUsers: [BoardUser!]!
   columns: [Column!]!
+  boardUsers: [BoardUser!]!
 }
 
 """
@@ -30,7 +30,8 @@ type Column {
   columnName: String!
   columnDescription: String!
   board: Board!
-  cards: [Card!]!
+  boardId: String!
+  cards: [Card]
 }
 
 type Comment {
@@ -54,6 +55,7 @@ type Card {
   endDate: DateTime!
   comments: [Comment!]!
   column: Column!
+  columnId: String!
 }
 
 enum Priority {
@@ -70,37 +72,27 @@ enum Status {
 }
 
 type Query {
-  columns: [Column!]!
-  column(id: String!): Column!
   boards: [Board!]!
   board(id: String!): Board!
-  boardUsers: [BoardUser!]!
+  columns: [Column!]!
+  column(id: String!): Column!
   cards(columnId: String!): [Card!]!
   card(id: String!): Card!
+  boardUsers: [BoardUser!]!
 }
 
 type Mutation {
-  createColumn(createColumnInput: CreateColumnInput!): Column!
-  updateColumn(updateColumnInput: UpdateColumnInput!): Column!
-  removeColumn(id: String!): Column!
   createBoard(createBoardInput: CreateBoardInput!): Board!
   updateBoard(updateBoardInput: UpdateBoardInput!): Board!
   removeBoard(id: String!): Board!
-  addBoardUser(addBoardUserInput: AddBoardUserInput!): BoardUser!
-  removeBoardUser(removeBoardUser: RemoveBoardUserInput!): BoardUser!
+  createColumn(createColumnInput: CreateColumnInput!): Column!
+  updateColumn(updateColumnInput: UpdateColumnInput!): Column!
+  removeColumn(id: String!): Column!
   createCard(createCardInput: CreateCardInput!): Card!
   updateCard(updateCardInput: UpdateCardInput!): Card!
   removeCard(id: String!): Card!
-}
-
-input CreateColumnInput {
-  boardId: String!
-  columnName: String!
-  columnDescription: String!
-}
-
-input UpdateColumnInput {
-  id: String!
+  addBoardUser(addBoardUserInput: AddBoardUserInput!): BoardUser!
+  removeBoardUser(removeBoardUser: RemoveBoardUserInput!): BoardUser!
 }
 
 input CreateBoardInput {
@@ -114,14 +106,14 @@ input UpdateBoardInput {
   id: String!
 }
 
-input AddBoardUserInput {
-  userId: String!
+input CreateColumnInput {
   boardId: String!
+  columnName: String!
+  columnDescription: String!
 }
 
-input RemoveBoardUserInput {
-  userId: String!
-  boardId: String!
+input UpdateColumnInput {
+  id: String!
 }
 
 input CreateCardInput {
@@ -147,4 +139,14 @@ input UpdateCardInput {
   endDate: DateTime
   columnId: String
   id: String!
+}
+
+input AddBoardUserInput {
+  userId: String!
+  boardId: String!
+}
+
+input RemoveBoardUserInput {
+  userId: String!
+  boardId: String!
 }

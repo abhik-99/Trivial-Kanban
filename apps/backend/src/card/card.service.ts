@@ -14,7 +14,7 @@ export class CardService {
     const cardNumber = await this.prisma.card.count({
       where: { column: { board: { columns: { some: { id: columnId } } } } },
     });
-    return this.prisma.card.create({
+    const card = await this.prisma.card.create({
       data: {
         ...createCardInput,
         column: { connect: { id: columnId } },
@@ -22,6 +22,8 @@ export class CardService {
         createdBy,
       },
     });
+    console.log("CARD CREATED =====", card)
+    return card
   }
 
   findAll(where: Prisma.CardWhereInput) {
