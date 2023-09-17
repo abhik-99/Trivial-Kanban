@@ -74,7 +74,7 @@ export class BoardResolver {
   }
 
   @ResolveField('columns', (returns) => [Column])
-  async boards(@Parent() board) {
+  async columnsResolver(@Parent() board) {
     const { id } = board;
     return this.columnService.findAll({boardId: id});
   }

@@ -42,6 +42,44 @@ export class BoardUserService {
     });
   }
 
+  findAllUsingColumn(userId: string, columnId: string) {
+    return this.prisma.boardUser.findMany({
+      where: {
+        userId,
+        board: {
+          is: {
+            columns: {
+              some: {
+                id: columnId
+              }
+            }
+          }
+        }
+      }
+    })
+  }
+
+  findAllUsingCard(userId: string, cardId: string) {
+    return this.prisma.boardUser.findMany({
+      where: {
+        userId,
+        board: {
+          is: {
+            columns: {
+              some: {
+                cards: {
+                  some: {
+                    id: cardId
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    })
+  }
+
   async remove(
     { userId, boardId }: RemoveBoardUserInput,
     existingUserId: string,

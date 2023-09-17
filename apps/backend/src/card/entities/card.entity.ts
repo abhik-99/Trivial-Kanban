@@ -50,7 +50,7 @@ export class Card {
   @Field(() => GraphQLISODateTime)
   endDate: Date;
 
-  @Field(() => [Comment!]!)
+  @Field(() => [Comment])
   comments: Comment[];
 
   @Field(() => Column)

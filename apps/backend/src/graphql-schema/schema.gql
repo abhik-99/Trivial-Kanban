@@ -35,8 +35,13 @@ type Column {
 }
 
 type Comment {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  createdBy: ID!
+  body: String!
+  card: Card!
+  cardId: ID!
 }
 
 type Card {
@@ -78,6 +83,7 @@ type Query {
   column(id: String!): Column!
   cards(columnId: String): [Card!]!
   card(id: String!): Card!
+  comment(id: String!): Comment!
   boardUsers: [BoardUser!]!
 }
 
@@ -91,6 +97,9 @@ type Mutation {
   createCard(createCardInput: CreateCardInput!): Card!
   updateCard(updateCardInput: UpdateCardInput!): Card!
   removeCard(id: String!): Card!
+  createComment(createCommentInput: CreateCommentInput!): Comment!
+  updateComment(updateCommentInput: UpdateCommentInput!): Comment!
+  removeComment(id: String!): Comment!
   addBoardUser(addBoardUserInput: AddBoardUserInput!): BoardUser!
   removeBoardUser(removeBoardUser: RemoveBoardUserInput!): BoardUser!
 }
@@ -139,6 +148,16 @@ input UpdateCardInput {
   endDate: DateTime
   columnId: String
   id: String!
+}
+
+input CreateCommentInput {
+  cardId: String!
+  body: String!
+}
+
+input UpdateCommentInput {
+  id: String!
+  body: String!
 }
 
 input AddBoardUserInput {

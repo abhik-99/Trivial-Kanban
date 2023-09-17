@@ -1,7 +1,20 @@
-import { InputType, Int, Field } from '@nestjs/graphql';
+import { InputType, Field } from '@nestjs/graphql';
+import {
+  IsNotEmpty,
+  IsUUID,
+  MaxLength
+} from 'class-validator';
 
 @InputType()
 export class CreateCommentInput {
-  @Field(() => Int, { description: 'Example field (placeholder)' })
-  exampleField: number;
+
+  @IsNotEmpty()
+  @IsUUID()
+  @Field(() => String)
+  cardId: string;
+
+  @IsNotEmpty()
+  @MaxLength(180)
+  @Field(()=> String)
+  body: string
 }

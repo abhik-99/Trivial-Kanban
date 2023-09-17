@@ -72,8 +72,8 @@ model Comment {
 
   createdBy String
   body      String
-  Card      Card?   @relation(fields: [cardId], references: [id])
-  cardId    String?
+  card      Card   @relation(fields: [cardId], references: [id])
+  cardId    String
 }
 
 enum Priority {
