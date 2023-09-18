@@ -21,15 +21,9 @@ export class BoardService {
     });
   }
 
-  findAll(userId: string) {
+  findAll(where: Prisma.BoardWhereInput) {
     return this.prisma.board.findMany({
-      where: {
-        boardUsers: {
-          some: {
-            userId,
-          },
-        },
-      },
+      where
     });
   }
 

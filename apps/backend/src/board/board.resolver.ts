@@ -17,10 +17,13 @@ import { BoardUserService } from 'src/board-user/board-user.service';
 import { BoardUser } from 'src/board-user/entities/board-user.entity';
 import { Column } from 'src/column/entities/column.entity';
 import { ColumnService } from 'src/column/column.service';
+import { User } from 'src/user/entities/user.entity';
+import { UserService } from 'src/user/user.service';
 
 @Resolver(() => Board)
 export class BoardResolver {
   constructor(
+    private readonly userService: UserService,
     private readonly boardService: BoardService,
     private readonly boardUserService: BoardUserService,
     private readonly columnService: ColumnService
@@ -36,7 +39,13 @@ export class BoardResolver {
 
   @Query(() => [Board], { name: 'boards' })
   findAll(@GraphQLUser() user: UserJwt) {
-    return this.boardService.findAll(user.sub);
+    return this.boardService.findAll({
+      boardUsers: {
+        some: {
+          userId: user.sub,
+        },
+      },
+    });
   }
 
   @Query(() => Board, { name: 'board' })
@@ -77,5 +86,11 @@ export class BoardResolver {
   async columnsResolver(@Parent() board) {
     const { id } = board;
     return this.columnService.findAll({boardId: id});
+  }
+
+  @ResolveField(undefined, (returns) => User)
+  async createdByUser(@Parent() board) {
+    const {createdBy} = board
+    return this.userService.findOne(createdBy)
   }
 }

@@ -2,8 +2,22 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type User {
+  id: ID!
+  name: String!
+  email: String!
+  emailVerified: DateTime!
+  image: String!
+  boardsCreated: [Board!]!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
 type BoardUser {
-  userId: ID!
+  user: User!
   board: Board!
 }
 
@@ -13,15 +27,10 @@ type Board {
   updatedAt: DateTime!
   boardName: String!
   boardDescription: String!
-  createdBy: ID!
+  createdByUser: User!
   columns: [Column!]!
   boardUsers: [BoardUser!]!
 }
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
 
 type Column {
   id: ID!
@@ -79,6 +88,7 @@ enum Status {
 type Query {
   boards: [Board!]!
   board(id: String!): Board!
+  user(id: String!): User!
   columns: [Column!]!
   column(id: String!): Column!
   cards(columnId: String): [Card!]!
@@ -91,6 +101,7 @@ type Mutation {
   createBoard(createBoardInput: CreateBoardInput!): Board!
   updateBoard(updateBoardInput: UpdateBoardInput!): Board!
   removeBoard(id: String!): Board!
+  removeUser: User!
   createColumn(createColumnInput: CreateColumnInput!): Column!
   updateColumn(updateColumnInput: UpdateColumnInput!): Column!
   removeColumn(id: String!): Column!

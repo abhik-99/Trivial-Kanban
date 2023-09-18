@@ -19,6 +19,7 @@ import { ColumnModule } from './column/column.module';
 import { join } from 'path';
 import { BoardUserModule } from './board-user/board-user.module';
 import { CommentModule } from './comment/comment.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -53,6 +54,7 @@ import { CommentModule } from './comment/comment.module';
     ColumnModule,
     BoardUserModule,
     CommentModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService, GoogleStrategy, JwtStrategy],
